@@ -1,0 +1,7 @@
+wordpress:
+  image: wordpress
+  imageTag: latest
+
+mysql:
+  image: mysql
+  imageTag: 5.7

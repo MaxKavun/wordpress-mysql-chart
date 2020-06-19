@@ -3,6 +3,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: wordpress-app
+  labels:
+    release: "{{ .Release.Name }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
 spec:
   replicas: 1
   selector:
@@ -15,7 +18,7 @@ spec:
     spec:
       containers:
       - name: wordpress
-        image: wordpress:latest
+        image: "{{ .Values.wordpress.image }}:{{ .Values.wordpress.imageTag }}"
         env:
         - name: WORDPRESS_DB_HOST
           value: mysql-svc
@@ -44,6 +47,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql-app
+  labels:
+    release: "{{ .Release.Name }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
 spec:
   replicas: 1
   selector:
@@ -60,7 +66,7 @@ spec:
           claimName: mysql-pvc
       containers:
       - name: mysql
-        image: mysql:5.7
+        image: "{{ .Values.mysql.image }}:{{ .Values.mysql.imageTag }}"
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
